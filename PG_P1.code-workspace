@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "PG_P1",
+			"path": "."
+		},
+		{
+			"name": "UE5",
+			"path": "H:\\game\\epic\\UE_5.1"
+		}
+	],
+	"settings": {
+		"typescript.tsc.autoDetect": "off"
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools",
+			"ms-dotnettools.csharp"
+		]
+	}
+}
