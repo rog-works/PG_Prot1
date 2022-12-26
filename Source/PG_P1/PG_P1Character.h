@@ -20,6 +20,10 @@ class PG_P1_API APG_P1Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
 
+	/** Look Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* LookAction;
+
 public:
 	// Sets default values for this character's properties
 	APG_P1Character();
@@ -31,7 +35,10 @@ protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& value);
 
-public:	
+	/** Called for camera input */
+	void Look(const FInputActionValue& value);
+
+public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
