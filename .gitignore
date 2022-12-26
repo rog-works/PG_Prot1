@@ -1,4 +1,7 @@
-.vscode/
+.vscode/compileCommands_Default/
+.vscode/compileCommands_PG_P1/
+.vscode/compileCommands_Default.json
+.vscode/compileCommands_PG_P1.json
 Binaries/
 DerivedDataCache/
 Intermediate
