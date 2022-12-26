@@ -11,7 +11,7 @@
 				"${workspaceFolder}\\Intermediate\\**",
 				"${workspaceFolder}\\Plugins\\**",
 				"${workspaceFolder}\\Source\\**",
-				"H:\\game\\epic\\UE_5.1\\Engine\\**"
+				"C:\\Program Files\\Epic Games\\UE_5.1\\Engine\\**"
 			],
 			"defines": [
 				"IS_PROGRAM=0",
