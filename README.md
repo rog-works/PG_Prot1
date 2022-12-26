@@ -24,11 +24,13 @@ $ git clone git@github.com:rog-works/PG_Prot1.git
 
 ## 3. IntelliSence用の設定ファイルを修正
 
-`c_cpp_properties.json.example`の以下エントリーを、`c_cpp_properties.json`をコピー＆ペースト
+`c_cpp_properties.json.example`の以下プロパティを、`c_cpp_properties.json`をコピー＆ペースト
 
 * `compilerCommands`
 * `includePath`
 * `defines`
+
+`Win32`のエントリーは不具合のもとになるので削除する
 
 ## 4. 実行
 
