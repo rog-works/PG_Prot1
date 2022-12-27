@@ -24,6 +24,10 @@ class PG_P1_API APG_P1Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	/** Jump Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* JumpAction;
+
 public:
 	// Sets default values for this character's properties
 	APG_P1Character();

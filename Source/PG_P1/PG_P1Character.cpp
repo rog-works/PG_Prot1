@@ -66,4 +66,6 @@ void APG_P1Character::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 
 	inputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APG_P1Character::Move);
 	inputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APG_P1Character::Look);
+	inputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APG_P1Character::Jump);
+	inputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &APG_P1Character::StopJumping);
 }
