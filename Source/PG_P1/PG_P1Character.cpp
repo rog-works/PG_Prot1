@@ -39,8 +39,10 @@ void APG_P1Character::Move(const FInputActionValue& value)
 	}
 
 	FVector2D moveVector = value.Get<FVector2D>();
-	AddMovementInput(GetActorForwardVector(), moveVector.Y);
-	AddMovementInput(GetActorRightVector(), moveVector.X);
+	FVector forward = FRotator(0, GetControlRotation().Yaw, 0).Vector();
+	FVector right = FRotator(0, 90.0, 0).RotateVector(forward);
+	AddMovementInput(forward, moveVector.Y);
+	AddMovementInput(right, moveVector.X);
 }
 
 void APG_P1Character::Look(const FInputActionValue &value)
