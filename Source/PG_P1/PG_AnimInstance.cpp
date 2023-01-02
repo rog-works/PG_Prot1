@@ -1,9 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PG_AnimInstance.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "PG_AnimInstance.h"
+#include "PG_P1Character.h"
+
+UPG_AnimInstance::UPG_AnimInstance()
+{
+	this->GroundSpeed = 0.0;
+	this->CanMove = false;
+	this->IsFalling = false;
+	this->IsFlying = false;
+	this->IsJumpUpped = false;
+	this->Interacted = false;
+}
 
 void UPG_AnimInstance::NativeInitializeAnimation()
 {
@@ -21,6 +32,7 @@ void UPG_AnimInstance::NativeUpdateAnimation(float DeltaTimeX)
 	this->IsFalling = this->GetIsFalling();
 	this->IsFlying = this->GetIsFlying();
 	this->IsJumpUpped = this->GetIsJumpUpped();
+	this->Interacted = this->GetInteracted();
 }
 
 float UPG_AnimInstance::GetGroundSpeed()
@@ -46,4 +58,9 @@ bool UPG_AnimInstance::GetIsFlying()
 bool UPG_AnimInstance::GetIsJumpUpped()
 {
 	return this->GetIsFlying() && this->Character->GetVelocity().Z > 0.0;
+}
+
+bool UPG_AnimInstance::GetInteracted()
+{
+	return Cast<APG_P1Character>(this->Character)->Interacted;
 }

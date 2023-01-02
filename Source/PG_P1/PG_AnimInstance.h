@@ -16,19 +16,28 @@ class PG_P1_API UPG_AnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 public:
+	UPG_AnimInstance();
+
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaTimeX) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	float GroundSpeed;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	bool CanMove;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	bool IsFalling;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	bool IsFlying;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	bool IsJumpUpped;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	bool Interacted;
 
 private:
 	ACharacter* Character;
@@ -38,4 +47,5 @@ private:
 	bool GetIsFalling();
 	bool GetIsFlying();
 	bool GetIsJumpUpped();
+	bool GetInteracted();
 };
