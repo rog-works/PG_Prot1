@@ -37,6 +37,9 @@ public:
 	bool IsJumpUpped;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	bool Fired;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	bool Interacted;
 
 private:
@@ -47,5 +50,6 @@ private:
 	bool GetIsFalling();
 	bool GetIsFlying();
 	bool GetIsJumpUpped();
+	bool GetFired();
 	bool GetInteracted();
 };

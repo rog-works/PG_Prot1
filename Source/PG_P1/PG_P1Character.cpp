@@ -3,26 +3,33 @@
 
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
+#include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Components/CapsuleComponent.h"
 #include "PG_P1Character.h"
 
 // Sets default values
-APG_P1Character::APG_P1Character()
+APG_P1Character::APG_P1Character(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	this->PrimaryActorTick.bCanEverTick = true;
 
 	this->ActorInteractable = nullptr;
 
-	UCapsuleComponent* capsuleComponent = this->GetCapsuleComponent();
-	if (!capsuleComponent) {
-		return;
-	}
+	FString componentName = TEXT("Box");
+	UBoxComponent* boxComponent = this->CreateDefaultSubobject<UBoxComponent>(*componentName);
+	boxComponent->InitBoxExtent(FVector(5.0, 12.0, 23.0));
+	boxComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 
-	capsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &APG_P1Character::OnBeginOverlap);
-	capsuleComponent->OnComponentEndOverlap.AddDynamic(this, &APG_P1Character::OnEndOverlap);
+	boxComponent->CanCharacterStepUpOn = ECB_No;
+	boxComponent->SetShouldUpdatePhysicsVolume(true);
+	boxComponent->SetCanEverAffectNavigation(false);
+	boxComponent->bDynamicObstacle = true;
+
+	boxComponent->SetupAttachment(this->GetCapsuleComponent());
+	this->InteractableBoxComponent = boxComponent;
+	boxComponent->OnComponentBeginOverlap.AddDynamic(this, &APG_P1Character::OnBeginOverlap);
+	boxComponent->OnComponentEndOverlap.AddDynamic(this, &APG_P1Character::OnEndOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -65,6 +72,24 @@ void APG_P1Character::Look(const FInputActionValue &value)
 	FVector2D vector = value.Get<FVector2D>();
 	this->AddControllerYawInput(vector.X);
 	this->AddControllerPitchInput(vector.Y * -1.0);
+}
+
+void APG_P1Character::FireEnter(const FInputActionValue &value)
+{
+	if (!this->Controller) {
+		return;
+	}
+
+	this->Fired = true;
+}
+
+void APG_P1Character::FireLeave(const FInputActionValue &value)
+{
+	if (!this->Controller) {
+		return;
+	}
+
+	this->Fired = false;
 }
 
 void APG_P1Character::InteractEnter(const FInputActionValue &value)
@@ -129,6 +154,8 @@ void APG_P1Character::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 	inputComponent->BindAction(this->LookAction, ETriggerEvent::Triggered, this, &APG_P1Character::Look);
 	inputComponent->BindAction(this->JumpAction, ETriggerEvent::Triggered, this, &APG_P1Character::Jump);
 	inputComponent->BindAction(this->JumpAction, ETriggerEvent::Completed, this, &APG_P1Character::StopJumping);
+	inputComponent->BindAction(this->FireAction, ETriggerEvent::Triggered, this, &APG_P1Character::FireEnter);
+	inputComponent->BindAction(this->FireAction, ETriggerEvent::Completed, this, &APG_P1Character::FireLeave);
 	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Triggered, this, &APG_P1Character::InteractEnter);
 	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Completed, this, &APG_P1Character::InteractLeave);
 }

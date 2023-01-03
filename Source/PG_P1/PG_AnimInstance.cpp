@@ -13,6 +13,7 @@ UPG_AnimInstance::UPG_AnimInstance()
 	this->IsFalling = false;
 	this->IsFlying = false;
 	this->IsJumpUpped = false;
+	this->Fired = false;
 	this->Interacted = false;
 }
 
@@ -32,6 +33,7 @@ void UPG_AnimInstance::NativeUpdateAnimation(float DeltaTimeX)
 	this->IsFalling = this->GetIsFalling();
 	this->IsFlying = this->GetIsFlying();
 	this->IsJumpUpped = this->GetIsJumpUpped();
+	this->Fired = this->GetFired();
 	this->Interacted = this->GetInteracted();
 }
 
@@ -58,6 +60,11 @@ bool UPG_AnimInstance::GetIsFlying()
 bool UPG_AnimInstance::GetIsJumpUpped()
 {
 	return this->GetIsFlying() && this->Character->GetVelocity().Z > 0.0;
+}
+
+bool UPG_AnimInstance::GetFired()
+{
+	return Cast<APG_P1Character>(this->Character)->Fired;
 }
 
 bool UPG_AnimInstance::GetInteracted()
