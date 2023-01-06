@@ -20,7 +20,4 @@ public:
 
 	UPROPERTY(BlueprintAssignable) // , Category = Weapon)
 	FComponentInteractSignature OnInteract;
-
-	UFUNCTION(BlueprintCallable)
-	FTimespan CalcTimespan(FDateTime a, FDateTime b);
 };

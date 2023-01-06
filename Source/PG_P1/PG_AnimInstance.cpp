@@ -64,10 +64,10 @@ bool UPG_AnimInstance::GetIsJumpUpped()
 
 bool UPG_AnimInstance::GetFired()
 {
-	return Cast<APG_P1Character>(this->Character)->Fired;
+	return Cast<APG_P1Character>(this->Character)->state == EPG_CharacterStates::Fire;
 }
 
 bool UPG_AnimInstance::GetInteracted()
 {
-	return Cast<APG_P1Character>(this->Character)->Interacted;
+	return Cast<APG_P1Character>(this->Character)->state == EPG_CharacterStates::Interact;
 }

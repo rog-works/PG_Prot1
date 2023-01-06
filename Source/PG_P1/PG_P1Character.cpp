@@ -14,6 +14,8 @@ APG_P1Character::APG_P1Character(const FObjectInitializer& ObjectInitializer) : 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	this->PrimaryActorTick.bCanEverTick = true;
 
+	this->state = EPG_CharacterStates::Idle;
+
 	this->ActorInteractable = nullptr;
 
 	FString componentName = TEXT("Box");
@@ -80,7 +82,7 @@ void APG_P1Character::FireEnter(const FInputActionValue &value)
 		return;
 	}
 
-	this->Fired = true;
+	this->state = EPG_CharacterStates::Fire;
 }
 
 void APG_P1Character::FireLeave(const FInputActionValue &value)
@@ -89,7 +91,7 @@ void APG_P1Character::FireLeave(const FInputActionValue &value)
 		return;
 	}
 
-	this->Fired = false;
+	this->state = EPG_CharacterStates::Idle;
 }
 
 void APG_P1Character::InteractEnter(const FInputActionValue &value)
@@ -98,7 +100,7 @@ void APG_P1Character::InteractEnter(const FInputActionValue &value)
 		return;
 	}
 
-	this->Interacted = true;
+	this->state = EPG_CharacterStates::Interact;
 
 	this->ActorInteractable->OnInteract.Broadcast(true);
 }
@@ -106,7 +108,7 @@ void APG_P1Character::InteractEnter(const FInputActionValue &value)
 void APG_P1Character::InteractLeave(const FInputActionValue &value)
 {
 	if (this->Controller) {
-		this->Interacted = false;
+		this->state = EPG_CharacterStates::Idle;
 	}
 }
 

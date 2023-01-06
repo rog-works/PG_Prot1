@@ -9,6 +9,14 @@
 #include "PG_ActorInteractable.h"
 #include "PG_P1Character.generated.h"
 
+UENUM(BlueprintType)
+enum class EPG_CharacterStates : uint8
+{
+	Idle,
+	Interact,
+	Fire,
+};
+
 UCLASS()
 class PG_P1_API APG_P1Character : public ACharacter
 {
@@ -17,6 +25,9 @@ class PG_P1_API APG_P1Character : public ACharacter
 public:
 	// Sets default values for this character's properties
 	APG_P1Character(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character, meta=(AllowPrivateAccess = "true"))
+	EPG_CharacterStates state;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
@@ -35,18 +46,12 @@ public:
 	class UInputAction* FireAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	bool Fired;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Input, meta=(AllowPrivateAccess = "true"))
 	APG_ActorInteractable* ActorInteractable;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	bool Interacted;
-
-	UPROPERTY(Category=Character, VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UBoxComponent> InteractableBoxComponent;
 
 protected:
