@@ -1,0 +1,282 @@
+ui:
+  splash:
+    class: UI/Form
+  title:
+    class: UI/Form
+    instantiatable:
+      when:
+        - title
+      from: system.mode.current
+    components:
+      continue:
+        class: UI/Button
+        enabled:
+          from: save.session.hasSlots
+        events:
+          onClick:
+            command: system.mode.change
+            to: game.load
+            slot: save.session.latestSlot
+      start:
+        class: UI/Button
+        events:
+          onClick:
+            command: system.mode.change
+            to: game.start
+      load:
+        class: UI/Button
+        enabled:
+          from: save.session.hasSlots
+        events:
+          onClick:
+            command: ui.open
+            target: ui.load
+      option:
+        class: UI/Button
+        events:
+          onClick:
+            command: ui.open
+            target: ui.option
+      quit:
+        class: UI/Button
+        events:
+          onClick:
+            command: system.quit
+
+  game:
+    class: UI/Form
+    instantiatable:
+      when:
+        - game
+      from: system.mode.current
+    components:
+      hud:
+        class: UI/Overlay
+        credit:
+          from: player.credit
+        tool:
+          slots:
+            class: UI/Container
+            in: player.pictograms
+            for:
+              class: UI/Image
+              image: resource.pictogram.icons[$.id]
+          selected: player.pictograms.selected
+      pause:
+        class: UI/Overlay
+        visibility: false
+        events:
+          onPause:
+            command: ui.open
+            target: ui.pause
+
+  pause:
+    class: UI/Form
+    instantiatable:
+      when:
+        - game
+      from: system.mode.current
+    components:
+      continue:
+        class: UI/Button
+        events:
+          onClick:
+            command: ui.close
+            target: ui.pause
+      save:
+        class: UI/Button
+        events:
+          onClick:
+            command: ui.open
+            target: ui.save
+      load:
+        class: UI/Button
+        enabled:
+          from: save.session.hasSlots
+        events:
+          onClick:
+            command: ui.open
+            target: ui.load
+      option:
+        class: UI/Button
+        events:
+          onClick:
+            command: ui.open
+            target: ui.option
+      toTitle:
+        class: UI/Button
+        events:
+          onClick:
+            command: system.mode.change
+            to: title
+
+  save:
+    class: UI/Form
+    components:
+      slots:
+        class: UI/Container
+          in: save.session.slots
+          for:
+              id: $.id
+              thumbnail: $.thumbnail
+              date: $.date
+              buttons:
+                class: UI/Form
+                components:
+                  remove:
+                    class: UI/Button
+                    events:
+                      onClick:
+                        command: save.session.slot.remove
+                        target: $
+      new:
+        class: UI/Button
+        events:
+          onClick:
+            command: save.session.newSession
+      close:
+        class: UI/Button
+        events:
+          onClick:
+            command: ui.close
+            target: ui.save
+
+  load:
+    class: UI/Form
+    components:
+      slots:
+        class: UI/Container
+          in: save.session.slots
+          for:
+              id: $.id
+              thumbnail: $.thumbnail
+              date: $.date
+              buttons:
+                class: UI/Form
+                components:
+                  load:
+                    class: UI/Button
+                    events:
+                      onClick:
+                        command: system.mode.change
+                        to: game.load
+                        slot: $
+                  remove:
+                    class: UI/Button
+                    events:
+                      onClick:
+                        command: save.session.removeSlot
+                        target: $
+      close:
+        class: UI/Button
+        events:
+          onClick:
+            command: ui.close
+            target: ui.load
+
+  option:
+    class: UI/Form
+    components:
+      class: UI/TabContainer
+      tabs:
+        graphic:
+          class: UI/Tab
+          components:
+            resolution:
+              class: UI/SelectBox
+              options:
+                - id: 640x480
+                  value: 640x480
+                - id: 1280x720
+                  value: 1280x720
+                - id: 1280x720
+                  value: 1920x1080
+              selected: save.option.graphic.resolution
+              events:
+                onChangeSelected:
+                  command: system.graphic.changeResolution
+            lightQuality:
+              class: UI/SelectBox
+              options:
+                - id: low
+                  value: low
+                - id: middle
+                  value: middle
+                - id: high
+                  value: high
+                - id: ultra
+                  value: ultra
+              selected: save.option.graphic.lightQuality
+              events:
+                onChangeSelected:
+                  command: system.graphic.changeLightQuality
+            shadowQuality:
+              class: UI/SelectBox
+              options:
+                - id: low
+                  value: low
+                - id: middle
+                  value: middle
+                - id: high
+                  value: high
+                - id: ultra
+                  value: ultra
+              selected: save.option.graphic.shadowQuality
+              events:
+                onChangeSelected:
+                  command: system.graphic.changeShadowQuality
+                  to: save.option.graphic.shadowQuality.selected
+            syncVertical:
+              class: UI/CheckBox
+              check: save.option.graphic.syncVertical
+              events:
+                onChangeValue:
+                  command: system.graphic.setSyncVertical
+        audio:
+          class: UI/Tab
+          components:
+            master:
+              class: UI/Slider
+              value: save.option.audio.master
+              events:
+                onChangeValue:
+                  command: system.audio.volume.setMaster
+            bgm:
+              class: UI/Slider
+              value: save.option.audio.bgm
+              events:
+                onChangeValue:
+                  command: system.audio.volume.setBGM
+            se:
+              class: UI/Slider
+              value: save.option.audio.se
+              events:
+                onChangeValue:
+                  command: system.audio.volume.setSE
+            mute:
+              class: UI/CheckBox
+              check: save.option.audio.mute
+              events:
+                onChangeValue:
+                  command: system.audio.volume.setMute
+        control:
+          class: UI/Tab
+          yAxisInvert:
+            class: UI/CheckBox
+            check: save.option.control.yAxisInvert
+            events:
+              onChangeValue:
+                command: system.control.setYAxisInvert
+      close:
+        class: UI/Button
+        events:
+          onClick:
+            command: ui.close
+            target: ui.option
+      apply:
+        class: UI/Button
+        enabled:
+          from: save.option.updated
+        events:
+          onClick:
+            command: save.option.save

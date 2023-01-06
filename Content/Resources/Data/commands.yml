@@ -1,0 +1,38 @@
+system:
+  mode:
+    change:
+      class: System/Mode
+      method: change
+      args:
+        to: Enum/Modes
+  quit:
+    class: System
+    method: quit
+save:
+  option:
+    save:
+      class: Save/Option
+      method: save
+    load:
+      class: Save/Option
+      method: load
+  session:
+    slots:
+      class: Save/Session
+      method: hasSession
+    new:
+      class: Save/Session
+      method: newSession
+game:
+  load:
+    class: Game
+    method: load
+    args:
+      slot: Save/SlotId
+ui:
+  title:
+    open:
+      class: UI
+      method: open
+      args:
+        target: title

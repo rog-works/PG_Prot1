@@ -1,0 +1,105 @@
+player:
+  class: Controller/Player
+  events:
+    onInputMove:
+      command: player.move
+    onInputJump:
+      command: player.jump
+    onInputInteract:
+      command: player.interact
+    onInputFire:
+      command: player.fire
+    onInputLook:
+      command: player.look
+
+character:
+  class: Actor/Character
+  states:
+    idle:
+      when:
+        - interact
+        - fire
+      to:
+        - interact
+        - fire
+    interact:
+      when:
+        - idle
+      to:
+        - idle
+    fire:
+      when:
+        - idle
+      to:
+        - idle
+  events:
+    onMove:
+      command: character.move
+      target: $
+      vector: $event.vector
+    onJump:
+      command: character.jump
+      target: $
+    onInteract:
+      command: character.interact
+      target: $
+    onFire:
+      command: character.fire
+      target: $
+
+projectile:
+  class: Actor/Actor
+  events:
+    onSpawn:
+      command: projectile.spawn
+      target: $
+      velocity:
+        func: func.vector.multiply
+        args:
+          - $sender.lookVector
+          - $.initialVelocity
+    onInteract:
+      command: projectile.interact
+      target: $
+
+light:
+  class: Actor/Actor
+  events:
+    onInteract:
+      command: actor.state.transition
+      target: $
+      next:
+        func: func.turnState
+        args:
+          - $.state
+          - 'On'
+          - 'Off'
+    onPictogramify:
+      fire:
+
+func:
+  vector:
+    multiply:
+      class: Expression/Function
+      args:
+        - $vector
+        - $magnification
+  turnState:
+    class: Expression/Function
+    args:
+      - $state
+      - $a
+      - $b
+    statements:
+      - if:
+          - left:
+              from: $state
+            operator: '=='
+            right:
+              from: $a
+        then:
+          - return:
+              from: $b
+        else:
+          - return:
+              from: $a
