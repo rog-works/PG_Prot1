@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UObject/ObjectMacros.h"
 #include "GameFramework/Actor.h"
 #include "PG_ActorInteractable.generated.h"
 
@@ -10,11 +11,16 @@ UCLASS()
 class PG_P1_API APG_ActorInteractable : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APG_ActorInteractable();
 
-	UFUNCTION(BlueprintCallable) // , Category = Weapon)
-	virtual void OnInteract(bool On);
+	DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(FComponentInteractSignature, APG_ActorInteractable, OnInteract, bool, On);
+
+	UPROPERTY(BlueprintAssignable) // , Category = Weapon)
+	FComponentInteractSignature OnInteract;
+
+	UFUNCTION(BlueprintCallable)
+	FTimespan CalcTimespan(FDateTime a, FDateTime b);
 };

@@ -100,7 +100,7 @@ void APG_P1Character::InteractEnter(const FInputActionValue &value)
 
 	this->Interacted = true;
 
-	this->ActorInteractable->OnInteract(true);
+	this->ActorInteractable->OnInteract.Broadcast(true);
 }
 
 void APG_P1Character::InteractLeave(const FInputActionValue &value)
@@ -156,6 +156,6 @@ void APG_P1Character::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 	inputComponent->BindAction(this->JumpAction, ETriggerEvent::Completed, this, &APG_P1Character::StopJumping);
 	inputComponent->BindAction(this->FireAction, ETriggerEvent::Triggered, this, &APG_P1Character::FireEnter);
 	inputComponent->BindAction(this->FireAction, ETriggerEvent::Completed, this, &APG_P1Character::FireLeave);
-	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Triggered, this, &APG_P1Character::InteractEnter);
+	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Started, this, &APG_P1Character::InteractEnter);
 	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Completed, this, &APG_P1Character::InteractLeave);
 }

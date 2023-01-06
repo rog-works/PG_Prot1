@@ -7,9 +7,6 @@
 #include "GameFramework/Character.h"
 #include "PG_AnimInstance.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class PG_P1_API UPG_AnimInstance : public UAnimInstance
 {
