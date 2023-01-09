@@ -7,6 +7,8 @@
 .vscode/tasks.json
 Binaries/
 DerivedDataCache/
-Intermediate
-Saved
+Intermediate/
+Saved/
+Build/
+Windows/
 Content/Resources/External/
