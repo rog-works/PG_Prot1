@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "PG_P1Character.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "PG_P1Character.h"
 
 // Sets default values
 APG_P1Character::APG_P1Character(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)

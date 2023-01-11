@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Kismet/KismetMathLibrary.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "PG_AnimInstance.h"
 #include "PG_P1Character.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UPG_AnimInstance::UPG_AnimInstance()
 {
