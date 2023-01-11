@@ -13,7 +13,9 @@ void ABG_LevelScriptActor::BeginPlay()
 	this->pauseUI = CreateWidget(this->GetWorld(), this->pauseUIClass);
 	this->pauseUI->AddToViewport();
 	this->pauseUI->SetVisibility(ESlateVisibility::Hidden);
-	this->pauseUI->OnVisibilityChanged.AddDynamic(this, &ABG_LevelScriptActor::onVisibilityChanged);
+
+	UW_PG_Pause* pgPauseUI = dynamic_cast<UW_PG_Pause*>(this->pauseUI);
+	pgPauseUI->OnShown.AddDynamic(this, &ABG_LevelScriptActor::onShown);
 
 	this->InputComponent->BindKey(EKeys::Tab, IE_Released, this, &ABG_LevelScriptActor::onInputPause);
 
@@ -27,24 +29,26 @@ void ABG_LevelScriptActor::BeginPlay()
 	}
  }
 
-void ABG_LevelScriptActor::onChangeMode(void* sender, PG_Core::EventData* e)
+void ABG_LevelScriptActor::onShown(bool Shown)
 {
-	PG_ModeEventData* data = (PG_ModeEventData*)e;
-	if (data->after == PG_Modes::Pause) {
-		this->onPauseBegin();
-	} else if (data->before == PG_Modes::Pause) {
-		this->onPauseEnd();
-	}
-}
+	UE_LOG(LogTemp, Warning, TEXT("ABG_LevelScriptActor: on shown"));
 
-void ABG_LevelScriptActor::onVisibilityChanged(ESlateVisibility inVisibility)
-{
-	if (inVisibility == ESlateVisibility::Hidden) {
+	if (!Shown) {
 		this->mode.setNext(PG_Modes::Run);
 	}
 }
 
-void ABG_LevelScriptActor::onPauseBegin()
+void ABG_LevelScriptActor::onChangeMode(void* sender, PG_Core::EventData* e)
+{
+	PG_ModeEventData* data = (PG_ModeEventData*)e;
+	if (data->after == PG_Modes::Pause) {
+		this->toPause();
+	} else if (data->before == PG_Modes::Pause) {
+		this->toRun();
+	}
+}
+
+void ABG_LevelScriptActor::toPause()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ABG_LevelScriptActor: on pause begin"));
 
@@ -54,7 +58,7 @@ void ABG_LevelScriptActor::onPauseBegin()
 	controller->SetInputMode(FInputModeUIOnly());
 }
 
-void ABG_LevelScriptActor::onPauseEnd()
+void ABG_LevelScriptActor::toRun()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ABG_LevelScriptActor: on pause end"));
 

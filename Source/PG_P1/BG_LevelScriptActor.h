@@ -28,12 +28,13 @@ private:
 	UUserWidget* pauseUI;
 
 	void onInputPause();
-	void onChangeMode(void* sender, PG_Core::EventData* e);
 
 	UFUNCTION()
-	void onVisibilityChanged(ESlateVisibility inVisibility);
+	void onShown(bool Show);
 
-	void onPauseBegin();
-	void onPauseEnd();
+	void onChangeMode(void* sender, PG_Core::EventData* e);
+
+	void toPause();
+	void toRun();
 };
 
