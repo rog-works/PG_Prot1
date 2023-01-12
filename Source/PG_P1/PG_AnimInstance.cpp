@@ -19,11 +19,15 @@ UPG_AnimInstance::UPG_AnimInstance()
 
 void UPG_AnimInstance::NativeInitializeAnimation()
 {
+	Super::NativeInitializeAnimation();
+
 	this->Character = Cast<ACharacter>(this->GetOwningActor());
 }
 
 void UPG_AnimInstance::NativeUpdateAnimation(float DeltaTimeX)
 {
+	Super::NativeUpdateAnimation(DeltaTimeX);
+
 	if (!this->TryGetPawnOwner()) {
 		return;
 	}

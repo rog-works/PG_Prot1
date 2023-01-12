@@ -18,6 +18,6 @@ public:
 
 	DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(FComponentInteractSignature, APG_ActorInteractable, OnInteract, bool, On);
 
-	UPROPERTY(BlueprintAssignable) // , Category = Weapon)
+	UPROPERTY(BlueprintAssignable)
 	FComponentInteractSignature OnInteract;
 };

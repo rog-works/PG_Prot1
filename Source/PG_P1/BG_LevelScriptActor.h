@@ -18,6 +18,9 @@ class PG_P1_API ABG_LevelScriptActor : public ALevelScriptActor
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="UMG")
+	TSubclassOf<UUserWidget> reticleUIClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="UMG")
 	TSubclassOf<UUserWidget> pauseUIClass;
 
 protected:
@@ -25,6 +28,8 @@ protected:
 
 private:
 	PG_Mode mode;
+
+	UUserWidget* reticleUI;
 	UUserWidget* pauseUI;
 
 	void onInputPause();
@@ -34,7 +39,10 @@ private:
 
 	void onChangeMode(void* sender, PG_Core::EventData* e);
 
-	void toPause();
-	void toRun();
+	void initToRun();
+	void runToPause();
+	void pauseToRun();
+
+	UUserWidget* createUI(TSubclassOf<UUserWidget> uiClass);
 };
 

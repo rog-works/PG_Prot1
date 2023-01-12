@@ -12,6 +12,7 @@
 enum class PG_Modes
 {
 	None,
+	Init,
 	Run,
 	Pause,
 };
@@ -32,7 +33,7 @@ public:
 	PG_Modes next();
 
 private:
-	PG_Modes _current = PG_Modes::Run;
+	PG_Modes _current = PG_Modes::Init;
 	PG_Modes _next = PG_Modes::None;
 
 	void transition();
