@@ -20,6 +20,7 @@ public:
 	USoundWave* se;
 
 protected:
+	// XXX PostLoadは適当ではないかもしれない
 	virtual void PostLoad() override;
 
 private:
