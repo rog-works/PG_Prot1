@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Engine/LevelScriptActor.h"
-#include "PG_Mode.h"
+#include "Components/SphereComponent.h"
+#include "PG_Core/PG_Mode.h"
+#include "PG_Core/PG_Save.h"
 #include "W_PG_Pause.h"
 #include "BG_LevelScriptActor.generated.h"
 
@@ -27,7 +29,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	PG_Mode mode;
+	PG_Core::PG_Mode mode;
+
+	bool isSaveActive;
+	PG_Core::PlayerSaveData saveData;
 
 	UUserWidget* reticleUI;
 	UUserWidget* pauseUI;
@@ -35,13 +40,20 @@ private:
 	void onInputPause();
 
 	UFUNCTION()
-	void onShown(bool Show);
+	void onOverlappedSavePoint(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void onContinue();
+
+	UFUNCTION()
+	void onReset();
 
 	void onChangeMode(void* sender, PG_Core::EventData* e);
 
 	void initToRun();
 	void runToPause();
 	void pauseToRun();
+	void pauseToReset();
 
 	UUserWidget* createUI(TSubclassOf<UUserWidget> uiClass);
 };

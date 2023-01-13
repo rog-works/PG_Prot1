@@ -34,6 +34,51 @@ APG_P1Character::APG_P1Character(const FObjectInitializer& ObjectInitializer) : 
 	boxComponent->OnComponentEndOverlap.AddDynamic(this, &APG_P1Character::OnEndOverlap);
 }
 
+// Called to bind functionality to input
+void APG_P1Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	UEnhancedInputComponent* inputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+	if (!inputComponent) {
+		return;
+	}
+
+	inputComponent->BindAction(this->MoveAction, ETriggerEvent::Triggered, this, &APG_P1Character::Move);
+	inputComponent->BindAction(this->LookAction, ETriggerEvent::Triggered, this, &APG_P1Character::Look);
+	inputComponent->BindAction(this->JumpAction, ETriggerEvent::Triggered, this, &APG_P1Character::Jump);
+	inputComponent->BindAction(this->JumpAction, ETriggerEvent::Completed, this, &APG_P1Character::StopJumping);
+	inputComponent->BindAction(this->FireAction, ETriggerEvent::Triggered, this, &APG_P1Character::FireEnter);
+	inputComponent->BindAction(this->FireAction, ETriggerEvent::Completed, this, &APG_P1Character::FireLeave);
+	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Started, this, &APG_P1Character::InteractEnter);
+	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Completed, this, &APG_P1Character::InteractLeave);
+}
+
+PG_Core::PlayerSaveData APG_P1Character::save()
+{
+	FTransform transform = this->GetActorTransform();
+	FVector location = transform.GetLocation();
+	FQuat rotation = transform.GetRotation();
+	PG_Core::PlayerSaveData saveData = PG_Core::PlayerSaveData();
+	saveData.transform.position.x = location.X;
+	saveData.transform.position.y = location.Y;
+	saveData.transform.position.z = location.Z;
+	saveData.transform.rotation.x = rotation.X;
+	saveData.transform.rotation.y = rotation.Y;
+	saveData.transform.rotation.z = rotation.Z;
+	return saveData;
+}
+
+void APG_P1Character::load(PG_Core::PlayerSaveData saveData)
+{
+	FTransform transform = this->GetActorTransform();
+	FVector location(saveData.transform.position.x, saveData.transform.position.y, saveData.transform.position.z);
+	FQuat rotation(saveData.transform.rotation.x, saveData.transform.rotation.y, saveData.transform.rotation.z, 1.0);
+	transform.SetLocation(location);
+	transform.SetRotation(rotation);
+	this->SetActorTransform(transform);
+}
+
 // Called when the game starts or when spawned
 void APG_P1Character::BeginPlay()
 {
@@ -140,24 +185,4 @@ void APG_P1Character::OnEndOverlap(class UPrimitiveComponent* OverlappedComponen
 	if (interactable == this->ActorInteractable) {
 		this->ActorInteractable = nullptr;
 	}
-}
-
-// Called to bind functionality to input
-void APG_P1Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	UEnhancedInputComponent* inputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
-	if (!inputComponent) {
-		return;
-	}
-
-	inputComponent->BindAction(this->MoveAction, ETriggerEvent::Triggered, this, &APG_P1Character::Move);
-	inputComponent->BindAction(this->LookAction, ETriggerEvent::Triggered, this, &APG_P1Character::Look);
-	inputComponent->BindAction(this->JumpAction, ETriggerEvent::Triggered, this, &APG_P1Character::Jump);
-	inputComponent->BindAction(this->JumpAction, ETriggerEvent::Completed, this, &APG_P1Character::StopJumping);
-	inputComponent->BindAction(this->FireAction, ETriggerEvent::Triggered, this, &APG_P1Character::FireEnter);
-	inputComponent->BindAction(this->FireAction, ETriggerEvent::Completed, this, &APG_P1Character::FireLeave);
-	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Started, this, &APG_P1Character::InteractEnter);
-	inputComponent->BindAction(this->InteractAction, ETriggerEvent::Completed, this, &APG_P1Character::InteractLeave);
 }

@@ -16,12 +16,10 @@ class PG_P1_API UPG_AcceptButton : public UButton
 	GENERATED_BODY()
 
 public:
+	UPG_AcceptButton();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	USoundWave* se;
-
-protected:
-	// XXX PostLoadは適当ではないかもしれない
-	virtual void PostLoad() override;
 
 private:
 	UFUNCTION()

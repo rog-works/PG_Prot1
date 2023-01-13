@@ -4,10 +4,8 @@
 #include "PG_AcceptButton.h"
 #include "Kismet/GameplayStatics.h"
 
-void UPG_AcceptButton::PostLoad()
+UPG_AcceptButton::UPG_AcceptButton()
 {
-	Super::PostLoad();
-
 	this->OnClicked.AddDynamic(this, &UPG_AcceptButton::onAccepted);
 }
 

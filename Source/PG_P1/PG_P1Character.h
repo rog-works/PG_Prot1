@@ -6,6 +6,7 @@
 #include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "Components/BoxComponent.h"
+#include "PG_Core/PG_Save.h"
 #include "PG_ActorInteractable.h"
 #include "PG_P1Character.generated.h"
 
@@ -18,7 +19,7 @@ enum class EPG_CharacterStates : uint8
 };
 
 UCLASS()
-class PG_P1_API APG_P1Character : public ACharacter
+class PG_P1_API APG_P1Character : public ACharacter, public PG_Core::ISaver<PG_Core::PlayerSaveData>
 {
 	GENERATED_BODY()
 
@@ -54,6 +55,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UBoxComponent> InteractableBoxComponent;
 
+public:
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual PG_Core::PlayerSaveData save() override;
+	virtual void load(PG_Core::PlayerSaveData saveData) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -72,8 +80,4 @@ private:
 
 	UFUNCTION()
 	void OnEndOverlap(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-public:
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

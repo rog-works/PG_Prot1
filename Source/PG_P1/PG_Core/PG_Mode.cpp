@@ -1,5 +1,7 @@
 #include "PG_Mode.h"
 
+using namespace PG_Core;
+
 PG_Mode::PG_Mode()
 {
 	UE_LOG(LogTemp, Warning, TEXT("PG_Mode: create"));
