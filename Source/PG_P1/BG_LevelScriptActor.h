@@ -7,7 +7,6 @@
 #include "Components/SphereComponent.h"
 #include "PG_Core/PG_Mode.h"
 #include "PG_Core/PG_Save.h"
-#include "W_PG_Pause.h"
 #include "BG_LevelScriptActor.generated.h"
 
 /**
