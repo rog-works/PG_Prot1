@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <string>
 #include <map>
 
@@ -17,9 +18,9 @@ namespace PG_Core
 
 	struct Vector3D
 	{
-		float x;
-		float y;
-		float z;
+		float x = 0.0;
+		float y = 0.0;
+		float z = 0.0;
 	};
 
 	struct Transform
@@ -32,21 +33,21 @@ namespace PG_Core
 
 	struct GeneralSaveData
 	{
-		std::string version;
-		bool enabled;
-		unsigned int timestamp;
+		std::string version = "";
+		bool enabled = false;
+		unsigned int timestamp = 0;
 	};
 
 	// option
 
 	struct DisplaySaveData
 	{
-		bool fullscreen;
+		bool fullscreen = false;
 	};
 
 	struct SoundSaveData
 	{
-		unsigned int master;
+		unsigned int master = 100;
 	};
 
 	struct OptionSaveData
@@ -84,43 +85,61 @@ namespace PG_Core
 		GameSaveData game;
 	};
 
+	typedef std::function<void (SaveData*)> CopyFunc;
+
 	class IPersister
 	{
 	public:
 		virtual void save(std::string name, SaveData* data) = 0;
-		virtual SaveData load(std::string name) = 0;
+		virtual void load(std::string name, CopyFunc func) = 0;
 		virtual void remove(std::string name) = 0;
 		virtual bool exists(std::string name) = 0;
 	};
 
-	template<class T>
-	class SaveSlot
+	class GlobalSaveSlot
 	{
 	public:
-		SaveSlot(IPersister* persister, std::string name) : _persister(persister), _name(name) {}
-		~SaveSlot();
+		GlobalSaveSlot(IPersister* persister, std::string name) : _persister(persister), _name(name) {}
+		~GlobalSaveSlot();
 		std::string name();
-		T* data();
+		GlobalSaveData* data();
 		void save();
 		void load();
-		void update(T* data);
+		void update(GlobalSaveData* data);
 		void remove();
 		bool exists();
 
 	private:
 		IPersister* _persister;
 		std::string _name;
-		T _data;
+		GlobalSaveData _data;
 	};
 
-	typedef SaveSlot<GlobalSaveData> GlobalSaveSlot;
-	typedef SaveSlot<SessionSaveData> SessionSaveSlot;
-	typedef std::map<std::string, SessionSaveSlot> SessionSaveSlotMap;
+	class SessionSaveSlot
+	{
+	public:
+		SessionSaveSlot(IPersister* persister, std::string name) : _persister(persister), _name(name) {}
+		~SessionSaveSlot();
+		std::string name();
+		SessionSaveData* data();
+		void save();
+		void load();
+		void update(SessionSaveData* data);
+		void remove();
+		bool exists();
+
+	private:
+		IPersister* _persister;
+		std::string _name;
+		SessionSaveData _data;
+	};
+
+	typedef std::map<std::string, SessionSaveSlot*> SessionSaveSlotMap;
 
 	class Save
 	{
 	public:
-		Save(IPersister* persister) : _persister(persister), _global(SaveSlot<GlobalSaveData>(persister, "global")) {}
+		Save(IPersister* persister) : _persister(persister), _global(GlobalSaveSlot(persister, "global")) {}
 		~Save();
 
 		GlobalSaveSlot* global();

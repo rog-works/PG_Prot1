@@ -5,15 +5,15 @@
 void UESavePersister::save(std::string name, PG_Core::SaveData *data)
 {
 	PG_Core::SessionSaveData* session = (PG_Core::SessionSaveData*)data;
-	UPG_SaveGame saveGame;
-	memcpy(&saveGame.session, session, sizeof(session));
-	UGameplayStatics::SaveGameToSlot(&saveGame, name.c_str(), 0);
+	UPG_SaveGame* saveGame = NewObject<UPG_SaveGame>();
+	saveGame->session = *session;
+	UGameplayStatics::SaveGameToSlot(saveGame, name.c_str(), 1);
 }
 
-PG_Core::SaveData UESavePersister::load(std::string name)
+void UESavePersister::load(std::string name, PG_Core::CopyFunc func)
 {
 	UPG_SaveGame* saveGame = Cast<UPG_SaveGame>(UGameplayStatics::LoadGameFromSlot(name.c_str(), 0));
-	return saveGame->session;
+	func(&saveGame->session);
 }
 
 void UESavePersister::remove(std::string name)

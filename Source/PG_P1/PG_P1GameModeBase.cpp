@@ -9,8 +9,7 @@
 
 APG_P1GameModeBase::APG_P1GameModeBase()
 {
-	UESavePersister persister = UESavePersister();
-	// this->save = new PG_Core::Save(&persister);
+	this->save = new PG_Core::Save(UESavePersister::getInstance());
 }
 
 APG_P1GameModeBase::~APG_P1GameModeBase()
@@ -53,7 +52,7 @@ void APG_P1GameModeBase::initWidget()
 
 	UUserWidget* saveUI = Cast<UUserWidget>(this->pauseMenuUI->GetWidgetFromName(TEXT("W_Save")));
 
-	UWidget* newSaveWidget = pauseUI->GetWidgetFromName(TEXT("ButtonNewSave"));
+	UWidget* newSaveWidget = saveUI->GetWidgetFromName(TEXT("ButtonNewSave"));
 	if (newSaveWidget) {
 		UButton* button = Cast<UButton>(newSaveWidget);
 		button->OnClicked.AddDynamic(this, &APG_P1GameModeBase::onNewSave);
@@ -132,8 +131,11 @@ void APG_P1GameModeBase::onNewSave()
 	if (player) {
 		auto slot = this->save->newSession("slot1");
 		PG_Core::SessionSaveData data;
-		// data.game.player = player->save();
-		// slot->update(&data);
+		data.game.player = player->save();
+		slot->update(&data);
+		slot->save();
+
+		UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: new save success"));
 	}
 }
 
