@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "PG_Core/PG_Save.h"
 #include "PG_SaveGame.generated.h"
 
 /**
@@ -13,5 +14,7 @@ UCLASS()
 class PG_P1_API UPG_SaveGame : public USaveGame
 {
 	GENERATED_BODY()
-	
+
+public:
+	PG_Core::SessionSaveData session;
 };
