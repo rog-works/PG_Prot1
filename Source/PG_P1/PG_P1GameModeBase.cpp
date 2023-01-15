@@ -126,17 +126,17 @@ void APG_P1GameModeBase::onNewSave()
 {
 	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: on new save"));
 
-	auto character = UGameplayStatics::GetPlayerCharacter(this->GetWorld(), 0);
-	APG_P1Character* player = Cast<APG_P1Character>(character);
-	if (player) {
-		auto slot = this->save->newSession("slot1");
-		PG_Core::SessionSaveData data;
-		data.game.player = player->save();
-		slot->update(&data);
-		slot->save();
+	// auto character = UGameplayStatics::GetPlayerCharacter(this->GetWorld(), 0);
+	// APG_P1Character* player = Cast<APG_P1Character>(character);
+	// if (player) {
+	// 	auto slot = this->save->newSession("slot1");
+	// 	PG_Core::SessionSaveData data;
+	// 	data.game.player = player->save();
+	// 	slot->update(&data);
+	// 	slot->save();
 
-		UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: new save success"));
-	}
+	// 	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: new save success"));
+	// }
 }
 
 void APG_P1GameModeBase::onChangeMode(void* sender, PG_Core::EventData* e)
