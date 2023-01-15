@@ -9,12 +9,12 @@
 
 APG_P1GameModeBase::APG_P1GameModeBase()
 {
-	this->save = new PG_Core::Save(UESavePersister::getInstance());
+	this->save = std::make_unique<PG_Core::Save>(UESavePersister::getInstance());
+	const PG_Core::Save& _save = *this->save.get();
 }
 
 APG_P1GameModeBase::~APG_P1GameModeBase()
 {
-	delete this->save;
 }
 
 void APG_P1GameModeBase::BeginPlay()

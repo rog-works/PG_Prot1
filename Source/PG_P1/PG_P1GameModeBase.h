@@ -33,7 +33,7 @@ protected:
 private:
 	PG_Core::PG_Mode mode;
 
-	PG_Core::Save* save;
+	std::unique_ptr<PG_Core::Save> save;
 
 	UUserWidget* reticleUI;
 	UUserWidget* pauseMenuUI;
