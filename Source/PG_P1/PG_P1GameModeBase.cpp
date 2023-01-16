@@ -49,7 +49,7 @@ void APG_P1GameModeBase::initWidget()
 
 	UUserWidget* pauseUI = Cast<UUserWidget>(this->pauseMenuUI->GetWidgetFromName(TEXT("W_Pause")));
 
-	UWidget* continueWidget = pauseUI->GetWidgetFromName(TEXT("ButtonContinue"));
+	UWidget* continueWidget = pauseUI->GetWidgetFromName(TEXT("ButtonResume"));
 	if (continueWidget) {
 		UButton* button = Cast<UButton>(continueWidget);
 		button->OnClicked.AddDynamic(this, &APG_P1GameModeBase::onContinue);
