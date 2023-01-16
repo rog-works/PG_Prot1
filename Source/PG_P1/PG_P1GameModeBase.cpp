@@ -3,6 +3,7 @@
 
 #include "PG_P1GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetStringLibrary.h"
 #include "Components/Button.h"
 #include "Components/SphereComponent.h"
 #include "PG_P1Character.h"
@@ -19,14 +20,20 @@ APG_P1GameModeBase::~APG_P1GameModeBase()
 
 void APG_P1GameModeBase::BeginPlay()
 {
-	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: begin play"));
+	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: begin play. options = %s, len = %d"), *this->OptionsString, this->OptionsString.Len());
 
 	this->initWidget();
 	this->initSavePoint();
 	this->initInput();
 	this->initMode();
 
-	this->mode.setNext(PG_Core::PG_Modes::Run);
+	if (this->OptionsString.Len() == 15) {
+		this->mode.setNext(PG_Core::PG_Modes::Load);
+	} else {
+		this->mode.setNext(PG_Core::PG_Modes::Run);
+	}
 }
 
 // initialize
@@ -145,7 +152,11 @@ void APG_P1GameModeBase::onChangeMode(void* sender, PG_Core::EventData* e)
 
 	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: on change mode. before = %d, after = %d"), data->before, data->after);
 
-	if (data->before == PG_Core::PG_Modes::Init && data->after == PG_Core::PG_Modes::Run) {
+	if (data->before == PG_Core::PG_Modes::Init && data->after == PG_Core::PG_Modes::Load) {
+		this->initToLoad();
+	} else if (data->before == PG_Core::PG_Modes::Load && data->after == PG_Core::PG_Modes::Run) {
+		this->loadToRun();
+	} else if (data->before == PG_Core::PG_Modes::Init && data->after == PG_Core::PG_Modes::Run) {
 		this->initToRun();
 	} else if (data->before == PG_Core::PG_Modes::Run && data->after == PG_Core::PG_Modes::Pause) {
 		this->runToPause();
@@ -158,9 +169,28 @@ void APG_P1GameModeBase::onChangeMode(void* sender, PG_Core::EventData* e)
 
 // mode operation
 
+void APG_P1GameModeBase::initToLoad()
+{
+	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: init to load"));
+
+	this->OnLoad.Broadcast();
+
+	this->mode.setNext(PG_Core::PG_Modes::Run);
+}
+
 void APG_P1GameModeBase::initToRun()
 {
 	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: init to run"));
+
+	APlayerController* controller = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
+	controller->SetInputMode(FInputModeGameOnly());
+
+	this->reticleUI->SetVisibility(ESlateVisibility::Visible);
+}
+
+void APG_P1GameModeBase::loadToRun()
+{
+	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: load to run"));
 
 	APlayerController* controller = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
 	controller->SetInputMode(FInputModeGameOnly());

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UObject/ObjectMacros.h"
 #include "GameFramework/GameModeBase.h"
 #include "PG_Core/PG_Mode.h"
 #include "PG_Core/PG_Save.h"
@@ -26,6 +27,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="UMG")
 	TSubclassOf<UUserWidget> pauseMenuUIClass;
+
+	DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE(FAPG_P1GameModeBaseOnLoadSignature, APG_P1GameModeBase, OnLoad);
+
+	UPROPERTY(BlueprintAssignable)
+	FAPG_P1GameModeBaseOnLoadSignature OnLoad;
 
 protected:
 	virtual void BeginPlay() override;
@@ -59,7 +65,9 @@ private:
 
 	void onChangeMode(void* sender, PG_Core::EventData* e);
 
+	void initToLoad();
 	void initToRun();
+	void loadToRun();
 	void runToPause();
 	void pauseToRun();
 	void pauseToReset();

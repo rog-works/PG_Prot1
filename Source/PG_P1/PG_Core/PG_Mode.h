@@ -15,6 +15,7 @@ namespace PG_Core
 	{
 		None,
 		Init,
+		Load,
 		Run,
 		Reset,
 		Pause,
