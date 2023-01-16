@@ -33,6 +33,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FAPG_P1GameModeBaseOnLoadSignature OnLoad;
 
+	UFUNCTION(BlueprintCallable)
+	bool StringEqual(FString a, FString b);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -45,14 +48,10 @@ private:
 	UUserWidget* pauseMenuUI;
 
 	void initWidget();
-	void initSavePoint();
 	void initInput();
 	void initMode();
 
 	void onInputPause();
-
-	UFUNCTION()
-	void onOverlappedSavePoint(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
 	void onContinue();

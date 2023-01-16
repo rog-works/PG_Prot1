@@ -18,6 +18,11 @@ APG_P1GameModeBase::~APG_P1GameModeBase()
 {
 }
 
+bool APG_P1GameModeBase::StringEqual(FString a, FString b)
+{
+	return a.Equals(b);
+}
+
 void APG_P1GameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -25,7 +30,6 @@ void APG_P1GameModeBase::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: begin play. options = %s, len = %d"), *this->OptionsString, this->OptionsString.Len());
 
 	this->initWidget();
-	this->initSavePoint();
 	this->initInput();
 	this->initMode();
 
@@ -66,19 +70,6 @@ void APG_P1GameModeBase::initWidget()
 	}
 }
 
-void APG_P1GameModeBase::initSavePoint()
-{
-	TArray<AActor*> savePointActors;
-	UGameplayStatics::GetAllActorsOfClassWithTag(this->GetWorld(), AActor::StaticClass(), TEXT("SavePoint"), savePointActors);
-	for (AActor* actor : savePointActors) {
-		auto component = actor->GetComponentByClass(USphereComponent::StaticClass());
-		USphereComponent* collision = Cast<USphereComponent>(component);
-		if (collision) {
-			collision->OnComponentBeginOverlap.AddDynamic(this, &APG_P1GameModeBase::onOverlappedSavePoint);
-		}
-	}
-}
-
 void APG_P1GameModeBase::initInput()
 {
 	// EnableInputを実行しないとInputComponentが有効にならない
@@ -100,18 +91,6 @@ void APG_P1GameModeBase::onInputPause()
 
 	if (this->mode.current() == PG_Core::PG_Modes::Run) {
 		this->mode.setNext(PG_Core::PG_Modes::Pause);
-	}
-}
-
-void APG_P1GameModeBase::onOverlappedSavePoint(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	UE_LOG(LogTemp, Warning, TEXT("APG_P1GameModeBase: on overlapped save point"));
-
-	auto character = UGameplayStatics::GetPlayerCharacter(this->GetWorld(), 0);
-	APG_P1Character* player = Cast<APG_P1Character>(character);
-	if (player) {
-		// this->saveData.general.enabled = true;
-		// this->saveData.game.player = player->save();
 	}
 }
 
