@@ -44,8 +44,8 @@ void APG_P1GameModeBase::BeginPlay()
 
 void APG_P1GameModeBase::initWidget()
 {
-	this->reticleUI = this->createUI(this->reticleUIClass);
-	this->pauseMenuUI = this->createUI(this->pauseMenuUIClass);
+	this->reticleUI = this->createUI(this->reticleUIClass, 0);
+	this->pauseMenuUI = this->createUI(this->pauseMenuUIClass, 1);
 
 	UUserWidget* pauseUI = Cast<UUserWidget>(this->pauseMenuUI->GetWidgetFromName(TEXT("W_Pause")));
 
@@ -218,10 +218,10 @@ void APG_P1GameModeBase::pauseToReset()
 
 // utility
 
-UUserWidget* APG_P1GameModeBase::createUI(TSubclassOf<UUserWidget> uiClass)
+UUserWidget* APG_P1GameModeBase::createUI(TSubclassOf<UUserWidget> uiClass, int32 zOrder)
 {
 	UUserWidget* ui = CreateWidget(this->GetWorld(), uiClass);
-	ui->AddToViewport();
+	ui->AddToViewport(zOrder);
 	ui->SetVisibility(ESlateVisibility::Hidden);
 	return ui;
 }

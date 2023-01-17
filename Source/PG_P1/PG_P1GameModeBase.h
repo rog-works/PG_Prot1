@@ -71,5 +71,5 @@ private:
 	void pauseToRun();
 	void pauseToReset();
 
-	UUserWidget* createUI(TSubclassOf<UUserWidget> uiClass);
+	UUserWidget* createUI(TSubclassOf<UUserWidget> uiClass, int32 zOrder);
 };
