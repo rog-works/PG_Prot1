@@ -19,7 +19,7 @@ public:
 	UPG_AcceptButton();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	USoundWave* se;
+	USoundBase* se;
 
 private:
 	UFUNCTION()
