@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "PG_InteractComponent.h"
 
 // Sets default values
 APG_P1Character::APG_P1Character(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -147,7 +148,13 @@ void APG_P1Character::InteractEnter(const FInputActionValue &value)
 
 	this->state = EPG_CharacterStates::Interact;
 
-	this->ActorInteractable->OnInteract.Broadcast(true);
+	auto _component = this->ActorInteractable->GetComponentByClass(UPG_InteractComponent::StaticClass());
+	if (!_component) {
+		return;
+	}
+
+	auto component = Cast<UPG_InteractComponent>(_component);
+	component->OnInteract.Broadcast(true);
 }
 
 void APG_P1Character::InteractLeave(const FInputActionValue &value)
@@ -163,12 +170,12 @@ void APG_P1Character::OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, 
 		return;
 	}
 
-	APG_ActorInteractable* interactable = Cast<APG_ActorInteractable>(OtherActor);
-	if (!interactable) {
+	auto _component = OtherActor->GetComponentByClass(UPG_InteractComponent::StaticClass());
+	if (!_component) {
 		return;
 	}
 
-	this->ActorInteractable = interactable;
+	this->ActorInteractable = OtherActor;
 }
 
 void APG_P1Character::OnEndOverlap(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -177,12 +184,7 @@ void APG_P1Character::OnEndOverlap(class UPrimitiveComponent* OverlappedComponen
 		return;
 	}
 
-	APG_ActorInteractable* interactable = Cast<APG_ActorInteractable>(OtherActor);
-	if (!interactable) {
-		return;
-	}
-
-	if (interactable == this->ActorInteractable) {
+	if (OtherActor == this->ActorInteractable) {
 		this->ActorInteractable = nullptr;
 	}
 }

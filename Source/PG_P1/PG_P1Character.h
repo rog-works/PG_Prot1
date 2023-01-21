@@ -7,7 +7,6 @@
 #include "GameFramework/Character.h"
 #include "Components/BoxComponent.h"
 #include "PG_Core/PG_Save.h"
-#include "PG_ActorInteractable.h"
 #include "PG_P1Character.generated.h"
 
 UENUM(BlueprintType)
@@ -50,7 +49,7 @@ public:
 	class UInputAction* InteractAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Input, meta=(AllowPrivateAccess = "true"))
-	APG_ActorInteractable* ActorInteractable;
+	AActor* ActorInteractable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Character, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UBoxComponent> InteractableBoxComponent;
