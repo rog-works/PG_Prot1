@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool StringEqual(FString a, FString b);
 
+	UFUNCTION(BlueprintCallable)
+	FTimespan DateTimeDiff(FDateTime a, FDateTime b);
+
 protected:
 	virtual void BeginPlay() override;
 

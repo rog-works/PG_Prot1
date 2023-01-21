@@ -23,6 +23,11 @@ bool APG_P1GameModeBase::StringEqual(FString a, FString b)
 	return a.Equals(b);
 }
 
+FTimespan APG_P1GameModeBase::DateTimeDiff(FDateTime a, FDateTime b)
+{
+	return b - a;
+}
+
 void APG_P1GameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
